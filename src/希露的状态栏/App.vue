@@ -1666,4 +1666,217 @@ function closeTrace() {
     transform: translateY(1px) rotateZ(1.5deg);
   }
 }
+
+/* ========== 手机端 / 窄屏适配 ========== */
+@media (max-width: 768px) {
+  .status-bar {
+    min-height: 300px;
+    font-size: 14px;
+  }
+
+  .flip-face {
+    padding: 14px 14px 10px;
+  }
+
+  .flip-face.flip-back {
+    padding-bottom: 14px;
+  }
+
+  .traces-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .trace-box {
+    min-height: 36px;
+    padding: 5px 6px;
+    font-size: 12px;
+  }
+
+  .env-header {
+    padding: 10px 12px;
+    font-size: 13px;
+    gap: 4px 10px;
+  }
+
+  .echo-box {
+    padding: 12px 14px;
+    margin-bottom: 50px;
+  }
+
+  .echo-title {
+    font-size: 14px;
+  }
+
+  .echo-content {
+    font-size: 14px;
+  }
+
+  .traces-summary {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .trace-modal {
+    width: 92%;
+    max-width: none;
+    max-height: 80%;
+  }
+
+  .trace-modal-header {
+    padding: 12px 16px;
+  }
+
+  .trace-modal-body {
+    padding: 12px 16px 16px;
+  }
+
+  .diary-turn-btn {
+    right: 12px;
+    bottom: 10px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .diary-btn-book {
+    width: 24px;
+    height: 32px;
+  }
+
+  .diary-page {
+    width: 11px;
+    height: 32px;
+  }
+
+  .page-two-content .amber-showcase {
+    margin-top: 40px;
+  }
+
+  .amber-glass {
+    width: 108px;
+    height: 126px;
+  }
+
+  .amber-glow {
+    width: 160px;
+    height: 160px;
+  }
+
+  .page-two-content .page-two-title {
+    font-size: 18px;
+  }
+
+  .page-two-content .amber-desc {
+    font-size: 14px;
+  }
+
+  .current-stage-section .stage-badge {
+    font-size: 14px;
+    padding: 5px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-bar {
+    min-height: 260px;
+    font-size: 13px;
+  }
+
+  .flip-face {
+    padding: 10px 10px 8px;
+  }
+
+  .flip-face.flip-back {
+    padding-bottom: 12px;
+  }
+
+  .traces-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .trace-box {
+    min-height: 38px;
+    padding: 6px 6px;
+    font-size: 12px;
+  }
+
+  .env-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .echo-box {
+    padding: 10px 12px;
+    margin-bottom: 48px;
+  }
+
+  .traces-summary {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .trace-modal {
+    width: 96%;
+    max-height: 85%;
+  }
+
+  .diary-turn-btn {
+    right: 10px;
+    bottom: 8px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .diary-btn-book {
+    width: 22px;
+    height: 28px;
+  }
+
+  .diary-page {
+    width: 10px;
+    height: 28px;
+  }
+
+  .page-two-lower {
+    padding: 10px 10px 6px;
+  }
+
+  .amber-glass {
+    width: 96px;
+    height: 112px;
+  }
+
+  .amber-glow {
+    width: 140px;
+    height: 140px;
+  }
+
+  .page-one-ring:nth-child(1) { width: 100px; height: 100px; }
+  .page-one-ring:nth-child(2) { width: 72px; height: 72px; }
+  .page-one-ring:nth-child(3) { width: 56px; height: 56px; }
+  .page-one-ring:nth-child(4) { width: 88px; height: 88px; }
+  .page-one-ring:nth-child(5) { width: 44px; height: 44px; margin-left: -22px; }
+}
+
+/* 触控优化：扩大可点区域、去除点击高亮 */
+.traces-summary,
+.trace-box,
+.diary-turn-btn,
+.trace-modal-close {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .diary-turn-btn:hover {
+    transform: none;
+  }
+
+  .diary-turn-btn:active {
+    transform: scale(0.96);
+  }
+}
 </style>
