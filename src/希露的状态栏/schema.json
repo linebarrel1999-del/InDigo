@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "default": {},
+  "type": "object",
+  "properties": {
+    "时间": {
+      "default": "12:00",
+      "type": "string",
+      "description": "格式为 时:分"
+    },
+    "日期": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "纪元": {
+          "default": "破晓纪元",
+          "type": "string",
+          "enum": [
+            "灰色纪元",
+            "破晓纪元",
+            "繁星纪元"
+          ]
+        },
+        "季节": {
+          "default": "春季",
+          "type": "string",
+          "enum": [
+            "春季",
+            "夏季",
+            "秋季",
+            "冬季"
+          ]
+        },
+        "日": {
+          "default": 1,
+          "description": "1到15之间",
+          "$ref": "#/$defs/__schema0"
+        }
+      }
+    },
+    "地点": {
+      "default": "村庄",
+      "type": "string",
+      "description": "所在地点，使用村庄、城市等泛指词汇"
+    },
+    "希露的痕迹": {
+      "default": {},
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "description": "物品名称或事件简述"
+      },
+      "additionalProperties": {
+        "default": {},
+        "type": "object",
+        "properties": {
+          "描述": {
+            "type": "string",
+            "description": "物品或事件的客观描述"
+          },
+          "希露的回忆": {
+            "type": "string",
+            "description": "以希露本人视角的联想回忆"
+          },
+          "类型": {
+            "default": "随记",
+            "type": "string",
+            "enum": [
+              "随记",
+              "关键",
+              "花语"
+            ]
+          }
+        },
+        "required": [
+          "描述",
+          "希露的回忆"
+        ]
+      }
+    },
+    "追忆瓣": {
+      "type": "number",
+      "description": "由系统自动计算，请勿手动修改"
+    },
+    "希露的花珀": {
+      "default": {},
+      "type": "object",
+      "properties": {
+        "描述": {
+          "default": "一块温暖的、水滴状的透明琥珀，里面封存着一片没有枯萎的雏菊花芯。",
+          "type": "string"
+        },
+        "阶段": {
+          "default": "嫩芽",
+          "type": "string",
+          "enum": [
+            "嫩芽",
+            "伴花",
+            "含苞",
+            "花开"
+          ]
+        }
+      }
+    },
+    "希露的回音": {
+      "default": "……",
+      "type": "string",
+      "description": "希露对主角最新行为的此刻感想"
+    }
+  },
+  "$defs": {
+    "__schema0": {
+      "type": "number"
+    }
+  }
+}
