@@ -40,26 +40,38 @@ export default function GameInterface({ onExit }: GameInterfaceProps) {
   const stageKey = typeof state?.amberState === 'string' ? state.amberState : '';
   const bgImage = (stageKey && STAGE_BG[stageKey]) ? STAGE_BG[stageKey] : defaultBg;
 
-  useEffect(() => {
+  /** 从酒馆变量同步状态（阶段来自 stat_data.希露的花珀.阶段），阶段变化后背景图会随之更新 */
+  const syncStateFromVariables = () => {
     try {
-      const variables = getVariables({ type: 'message', message_id: 'latest' as const });
+      let messageId: number | 'latest' = 'latest';
+      try {
+        messageId = getCurrentMessageId();
+      } catch {
+        // 非楼层 iframe 时用 latest
+      }
+      const variables = getVariables({ type: 'message', message_id: messageId });
       const stat = _.get(variables, 'stat_data', {});
+      const 花珀 = _.get(stat, '希露的花珀', {});
+      const 日期 = _.get(stat, '日期', {});
       setState((prev) => ({
-        time: _.get(stat, 'time', prev.time),
+        time: _.get(stat, '时间', prev.time),
         date: {
-          era: _.get(stat, 'date.era', prev.date.era),
-          season: _.get(stat, 'date.season', prev.date.season),
-          day: _.get(stat, 'date.day', prev.date.day),
+          era: _.get(日期, '纪元', prev.date.era),
+          season: _.get(日期, '季节', prev.date.season),
+          day: Number(_.get(日期, '日', prev.date.day)),
         },
-        location: _.get(stat, 'location', prev.location),
-        amberState: _.get(stat, 'amber_state', prev.amberState),
-        memoryPetals: Number(_.get(stat, 'memory_petals', prev.memoryPetals)),
-        echo: _.get(stat, 'echo', prev.echo),
+        location: _.get(stat, '地点', prev.location),
+        amberState: _.get(花珀, '阶段', prev.amberState),
+        memoryPetals: Number(_.get(stat, '追忆瓣', prev.memoryPetals)),
+        echo: _.get(stat, '希露的回音', prev.echo),
       }));
     } catch (err) {
       console.error('读取状态变量失败', err);
     }
+  };
 
+  useEffect(() => {
+    syncStateFromVariables();
     try {
       const messages = getChatMessages('0-{{lastMessageId}}');
       const memoriesRaw = extractMemoriesFromMessages(messages as any[]);
@@ -73,6 +85,21 @@ export default function GameInterface({ onExit }: GameInterfaceProps) {
     } catch (err) {
       console.error('读取聊天记录失败', err);
     }
+
+    const offReceived = eventOn(tavern_events.MESSAGE_RECEIVED, () => syncStateFromVariables());
+    const offUpdated = eventOn(tavern_events.MESSAGE_UPDATED, () => syncStateFromVariables());
+    const offSwiped = eventOn(tavern_events.MESSAGE_SWIPED, () => syncStateFromVariables());
+    // 阶段(amber_state)由 MVU 更新，换阶段后需据此同步背景图
+    const offMvu =
+      typeof Mvu !== 'undefined' && Mvu?.events?.VARIABLE_UPDATE_ENDED
+        ? eventOn(Mvu.events.VARIABLE_UPDATE_ENDED, () => syncStateFromVariables())
+        : undefined;
+    return () => {
+      offReceived?.stop?.();
+      offUpdated?.stop?.();
+      offSwiped?.stop?.();
+      offMvu?.stop?.();
+    };
   }, []);
 
   /** 对话日志只显示当前楼层 <memories> 里已显示过的段落 */
@@ -209,16 +236,30 @@ function LogPanel({ logs }: { logs: string[] }) {
   );
 }
 
+/**
+ * 仅从「最新一条 AI 消息」中提取 <memories> 内容，不扫描历史；
+ * 并先剔除 <think>/thinking 等思考块（含未闭合、仅结尾等阴间格式），再提取，避免误抓乱码。
+ */
 function extractMemoriesFromMessages(messages: any[]): string {
-  for (let i = messages.length - 1; i >= 0; i--) {
-    const mes: string = (messages[i]?.message as string) ?? '';
-    if (!mes) continue;
-    const match = mes.match(/<memories>([\s\S]*?)<\/memories>/i);
-    if (match) {
-      return match[1].trim();
-    }
-  }
-  return '';
+  // 第一步：精准定位最新 AI 消息（杜绝历史污染）
+  if (!Array.isArray(messages) || messages.length === 0) return '';
+  const latest = messages[messages.length - 1];
+  if (latest?.role === 'user') return '';
+
+  // 第二步：获取文本副本
+  const text: string = (latest?.message as string) ?? '';
+  if (!text) return '';
+
+  // 第三步：双重过滤剔除思考块（无视所有阴间格式）
+  let cleanText = text.replace(
+    /<(?:think|thinking|thought|details)[^>]*>[\s\S]*?(?:<\/(?:think|thinking|thought|details)>|$)/gi,
+    '',
+  );
+  cleanText = cleanText.replace(/^[\s\S]*?<\/(?:think|thinking|thought|details)>/i, '');
+
+  // 第四步：安全提取与返回
+  const match = cleanText.match(/<memories>([\s\S]*?)<\/memories>/i);
+  return match ? String(match[1] ?? '').trim() : '';
 }
 
 /** 将 memories 原文按段落拆分，并解析每段开头的「说话人：」；无则默认为希露。 */

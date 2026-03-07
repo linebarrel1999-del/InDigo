@@ -131,18 +131,33 @@
                 <span class="deco-blob deco-blob--r"></span>
                 <span class="deco-blob deco-blob--t"></span>
               </div>
-              <div class="amber-glow"></div>
-              <div class="amber-glass">
-                <div class="daisy-core">
-                  <div
-                    v-for="n in 12"
-                    :key="n"
-                    class="petal"
-                    :style="{ '--angle': `${(n - 1) * 30}deg` }"
-                  ></div>
-                  <div class="stigma"></div>
+              <template v-if="data.希露的花珀?.阶段 === '花开'">
+                <div class="bloom-daisy-wrap">
+                  <div class="daisy-core">
+                    <div
+                      v-for="n in 12"
+                      :key="n"
+                      class="petal"
+                      :style="{ '--angle': `${(n - 1) * 30}deg` }"
+                    ></div>
+                    <div class="stigma"></div>
+                  </div>
                 </div>
-              </div>
+              </template>
+              <template v-else>
+                <div class="amber-glow"></div>
+                <div class="amber-glass">
+                  <div class="daisy-core">
+                    <div
+                      v-for="n in 12"
+                      :key="n"
+                      class="petal"
+                      :style="{ '--angle': `${(n - 1) * 30}deg` }"
+                    ></div>
+                    <div class="stigma"></div>
+                  </div>
+                </div>
+              </template>
               <div class="stage-info">
                 <div class="stage-name"><span class="stage-icon" aria-hidden="true"></span> {{ data.希露的花珀.阶段 }}</div>
                 <div class="petal-count">{{ petalsLabel }}：{{ data.追忆瓣 }} / 3</div>
@@ -949,6 +964,29 @@ function closeTrace() {
     0 16px 44px -8px rgba(30, 25, 15, 0.4),
     inset 0 2px 14px rgba(255, 255, 255, 0.55),
     inset -3px -6px 18px hsla(30, 60%, 35%, 0.22);
+}
+
+/* 花开阶段：琥珀消失，仅保留盛开花瓣 */
+.bloom-daisy-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+  filter: drop-shadow(0 10px 28px rgba(30, 25, 15, 0.22));
+}
+
+.amber-showcase.stage-3 .bloom-daisy-wrap .daisy-core {
+  transform: scale(2);
+}
+
+.amber-showcase.stage-3 .bloom-daisy-wrap .petal {
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    0 0 14px -2px hsla(38, 90%, 70%, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.6);
 }
 
 .daisy-core {

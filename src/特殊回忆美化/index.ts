@@ -18,15 +18,21 @@ $(() => {
   link.onerror = () => {};
   document.head.appendChild(link);
 
-  try {
-    const root = createRoot(container);
-    root.render(React.createElement(StrictMode, null, React.createElement(App)));
-    $(window).on('pagehide', () => {
-      root.unmount();
-    });
-  } catch (err) {
-    console.error('特殊回忆美化加载失败', err);
-    container.innerHTML = `<div style="padding:1rem;color:#fbbf24;font-family:sans-serif;font-size:14px;">界面加载异常：${String((err as Error).message)}</div>`;
-  }
+  const doMount = () => {
+    try {
+      const root = createRoot(container as HTMLElement);
+      root.render(React.createElement(StrictMode, null, React.createElement(App)));
+      $(window).on('pagehide', () => {
+        root.unmount();
+      });
+    } catch (err) {
+      console.error('特殊回忆美化加载失败', err);
+      (container as HTMLElement).innerHTML = `<div style="padding:1rem;color:#fbbf24;font-family:sans-serif;font-size:14px;">界面加载异常：${String((err as Error).message)}</div>`;
+    }
+  };
+
+  void waitGlobalInitialized('Mvu')
+    .then(doMount)
+    .catch(() => doMount());
 });
 
