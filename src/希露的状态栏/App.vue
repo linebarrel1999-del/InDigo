@@ -11,7 +11,7 @@
           <div class="ciel-board">
             <div class="page-one-image-area" aria-label="第一页配图区">
               <img
-                :src="data.希露的花珀?.阶段 === '嫩芽' ? 'https://i.postimg.cc/TPn4jtbF/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_1379012392_upscal.png' : data.希露的花珀?.阶段 === '伴花' ? 'https://i.postimg.cc/tTZHH3nX/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_326266859_upscale.png' : data.希露的花珀?.阶段 === '含苞' ? 'https://i.postimg.cc/Vvm4F1wd/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_597142170_upscale.png' : data.希露的花珀?.阶段 === '花开' ? 'https://i.postimg.cc/D0wLZzF0/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_1626345664_upscal.png' : 'https://files.catbox.moe/vvlk8g.png'"
+                :src="data.希露的花珀?.阶段 === '嫩芽' ? 'https://i.postimg.cc/FHf0jDBt/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_2327505803_upscal.png' : data.希露的花珀?.阶段 === '伴花' ? 'https://i.postimg.cc/t4LWDWKg/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_1877471846_upscal.png' : data.希露的花珀?.阶段 === '含苞' ? 'https://i.postimg.cc/Vvm4F1wd/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_597142170_upscale.png' : data.希露的花珀?.阶段 === '花开' ? 'https://i.postimg.cc/D0wLZzF0/2_0_artist_channel_(caststation)_1_5_artist_cogecha_1_3_artist_chocoan_s_1626345664_upscal.png' : 'https://files.catbox.moe/vvlk8g.png'"
                 alt=""
               />
             </div>
@@ -160,7 +160,7 @@
               </template>
               <div class="stage-info">
                 <div class="stage-name"><span class="stage-icon" aria-hidden="true"></span> {{ data.希露的花珀.阶段 }}</div>
-                <div class="petal-count">{{ petalsLabel }}：{{ data.追忆瓣 }} / 3</div>
+                <div class="petal-count">{{ petalsLabel }}：{{ Math.min(data.追忆瓣 ?? 0, 3) }} / 3</div>
               </div>
             </div>
             <section class="current-stage-section">
@@ -710,7 +710,12 @@ function closeTrace() {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   box-sizing: border-box;
+}
+.ciel-board::-webkit-scrollbar {
+  display: none;
 }
 
 /* 第一页上半：19:13 配图区，可放 19:13 图片；底部渐变衔接文字，悬停放大，圆角 */
@@ -1135,7 +1140,14 @@ function closeTrace() {
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .traces-collapse.open {
-  max-height: 320px;
+  max-height: 145px !important;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.traces-collapse.open::-webkit-scrollbar {
+  display: none !important;
 }
 
 .traces-collapse-inner {
