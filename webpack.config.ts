@@ -196,10 +196,13 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     watchOptions: {
       ignored: ['**/dist', '**/node_modules'],
     },
+<<<<<<< HEAD
     performance: {
       maxAssetSize: 512 * 1024,
       maxEntrypointSize: 512 * 1024,
     },
+=======
+>>>>>>> f759a3e3f10c9abb6086ecf76222f35268e80cf1
     entry: path.join(import.meta.dirname, entry.script),
     target: 'browserslist',
     output: {
