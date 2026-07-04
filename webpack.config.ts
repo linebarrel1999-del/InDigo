@@ -196,10 +196,13 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     watchOptions: {
       ignored: ['**/dist', '**/node_modules'],
     },
+<<<<<<< HEAD
     performance: {
       maxAssetSize: 512 * 1024,
       maxEntrypointSize: 512 * 1024,
     },
+=======
+>>>>>>> 24c09dd0d2e3a345ced6bd6449ff0c89cd686543
     entry: path.join(import.meta.dirname, entry.script),
     target: 'browserslist',
     output: {
@@ -456,6 +459,10 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
             { from: 'klona', imports: ['klona'] },
             { from: 'vue-final-modal', imports: ['useModal'] },
             { from: 'zod', imports: ['z'] },
+<<<<<<< HEAD
+=======
+            { from: 'type-fest', imports: [['*', 'TypeFest']], type: true },
+>>>>>>> 24c09dd0d2e3a345ced6bd6449ff0c89cd686543
           ],
         }),
         unpluginVueComponents({
