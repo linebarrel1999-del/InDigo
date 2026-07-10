@@ -49,7 +49,11 @@
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
+<<<<<<< HEAD
   "typescript.tsdk": "node_modules/typescript/lib",
   "liveServer.settings.cors": false,
   "workbench.settings.useSplitJSON": false
+=======
+  "typescript.tsdk": "node_modules/typescript/lib"
+>>>>>>> 299b9bb0dd0e1b9c9863f20ca4cbc261e552bdd5
 }
